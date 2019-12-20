@@ -1,26 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import Navbar from './components/Navbar';
+import ShoppingCart from './components/ShoppingCart';
+import InsertItem from './components/InsertItem';
+import uuid from 'uuid';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+const shoppingListItems = [
+  {
+    id: uuid(),
+    name: 'Item 1'
+  },
+  {
+    id: uuid(),
+    name: 'Item 2'
+  },
+  {
+    id: uuid(),
+    name: 'Item 3'
+  }
+];
+
+class App extends Component {
+  state = {
+    cartItems: shoppingListItems
+  };
+
+  deleteItem = id => {
+    this.setState(state => ({
+      cartItems: state.cartItems.filter(item => item.id !== id)
+    }));
+  };
+
+  addItem = newItem => {
+    this.setState(state => ({
+      cartItems: [...state.cartItems, newItem]
+    }));
+  };
+
+  render() {
+    return (
+      <div className="container">
+        <Navbar />
+        <InsertItem onAddItem={this.addItem} />
+        <ShoppingCart
+          onDeleteItem={this.deleteItem}
+          cartItems={this.state.cartItems}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
